@@ -1,7 +1,8 @@
 from app import app
 from flask import render_template, redirect, url_for, flash
+from flask_login import login_user, logout_user, login_required, current_user
 from app.models import User
-from app.forms import RegisterForm
+from app.forms import RegisterForm, LoginForm
 
 @app.route('/')
 def index():
@@ -28,3 +29,31 @@ def register():
             return redirect(url_for('register'))
 
     return render_template('register.html', form=form)
+
+# Log user in
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+
+        user = User.query.filter_by(username=username).first()
+
+        if not user or not user.check_password(password):
+            flash(f'Incorrect username/password or {user.username} does not exist', 'warning')
+            return redirect(url_for('login'))
+        else:
+            login_user(user)
+            flash('You have successfully logged in', 'success')
+            return redirect(url_for('index'))
+
+    return render_template('login.html', form=form)
+
+# Log user out
+@app.route('/logout')
+def logout():
+    logout_user()
+    flash('You have succcessfully logged out', 'success')
+    return redirect(url_for('index'))
