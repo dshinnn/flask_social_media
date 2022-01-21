@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, flash
 from app.models import User
 from app.forms import RegisterForm
 
@@ -16,8 +16,7 @@ def register():
         email = form.email.data
         password = form.password.data
         User(username=username, email=email, password=password)
-        print('Username has been successfully created!')
+        flash('Username has been successfully created!', 'success')
         return redirect(url_for('index'))
-    else:
-        print('FAILED')
+        
     return render_template('register.html', form=form)
