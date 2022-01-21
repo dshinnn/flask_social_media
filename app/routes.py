@@ -7,6 +7,7 @@ from app.forms import RegisterForm
 def index():
     return render_template('index.html')
 
+# Register new user
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
@@ -15,8 +16,15 @@ def register():
         username = form.username.data
         email = form.email.data
         password = form.password.data
-        User(username=username, email=email, password=password)
-        flash('Username has been successfully created!', 'success')
-        return redirect(url_for('index'))
-        
+
+        user_exist = User.query.filter((User.username==username) | (User.email==email))
+
+        if not user_exist:
+            User(username=username, email=email, password=password)
+            flash('Username has been successfully created!', 'success')
+            return redirect(url_for('index'))
+        else:
+            flash(f'{username} or {email} already exists, please login or register with a different username.', 'danger')
+            return redirect(url_for('register'))
+
     return render_template('register.html', form=form)
