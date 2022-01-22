@@ -97,7 +97,7 @@ def post_info(post_id):
 def edit_post(post_id):
     post = Post.query.get_or_404(post_id)
 
-    if current_user.id != post.id:
+    if current_user.id != post.user_id:
         flash("Error: Cannot edit someone else's post", "danger")
         return redirect(url_for('post_info', post_id=post.id))
     
