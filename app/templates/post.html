@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="card bg-dark text-white mt-3" >
+    <div class="card-body">
+        <h2 class="card-title">{{ post.title }}</h2>
+        <p class="card-subtitle mb-2 text-muted">posted by: {{ post.get_user() }}</p>
+        <h5 class="card-text">{{ post.post_section }}</h5>
+        {% if current_user.id == post.user_id %}
+            <a href="#" class="card-link">Edit</a>
+            <a href="#" class="card-link">Delete</a>
+        {% endif %}
+    </div>
+  </div>
+{% endblock %}

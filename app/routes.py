@@ -77,9 +77,8 @@ def create_post():
     return render_template('create_post.html', form=form)
 
 
-# @app.route('/user=<int:user_id>')
-# @login_required
-# def user_info(user_id):
-#     user = User.query.get_or_404(user_id)
-#     return render_template('index.html', user=user)
+@app.route('/post/<int:post_id>')
+def post_info(post_id):
+    post = Post.query.get_or_404(post_id)
+    return render_template('post.html', post=post)
 
