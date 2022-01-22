@@ -6,7 +6,8 @@ from app.forms import RegisterForm, LoginForm, PostForm
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    posts = Post.query.all()
+    return render_template('index.html', posts=posts)
 
 # Register new user
 @app.route('/register', methods=['GET', 'POST'])
@@ -58,6 +59,7 @@ def logout():
     flash('You have succcessfully logged out', 'success')
     return redirect(url_for('index'))
 
+# Creates a new post
 @app.route('/create_post', methods=['GET', 'POST'])
 @login_required
 def create_post():

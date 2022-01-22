@@ -49,6 +49,9 @@ class Post(db.Model):
     def __repr__(self):
         return f"<Post|{self.title}>"
 
+    def get_user(self):
+        return User.query.filter_by(id=self.user_id).first().username
+
     def save_post(self):
         db.session.commit()
 
