@@ -73,6 +73,9 @@ class Comment(db.Model):
     def __repr__(self):
         return f"<Comment|{self.comment_section}>"
 
+    def get_user(self):
+        return User.query.filter_by(id=self.user_id).first().username
+        
     def save_comment(self):
         db.session.commit()
 

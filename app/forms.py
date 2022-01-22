@@ -1,6 +1,6 @@
 from ast import Pass
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo
 
 class RegisterForm(FlaskForm):
@@ -18,4 +18,8 @@ class LoginForm(FlaskForm):
 class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     post_section = StringField('Text')
+    submit = SubmitField('Post')
+
+class CommentForm(FlaskForm):
+    comment = TextAreaField('Comment', validators=[DataRequired()])
     submit = SubmitField('Post')

@@ -2,7 +2,7 @@ from app import app
 from flask import render_template, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from app.models import User, Post, Comment
-from app.forms import RegisterForm, LoginForm, PostForm
+from app.forms import RegisterForm, LoginForm, PostForm, CommentForm
 
 @app.route('/')
 def index():
@@ -77,10 +77,20 @@ def create_post():
     return render_template('create_post.html', form=form)
 
 
-@app.route('/post/<int:post_id>')
+@app.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def post_info(post_id):
     post = Post.query.get_or_404(post_id)
-    return render_template('post.html', post=post)
+    form = CommentForm()
+
+    if form.validate_on_submit():
+        comment = form.comment.data
+        user_id = current_user.id
+        post_id = post.id
+        Comment(comment_section=comment, user_id=user_id, post_id=post_id)
+        flash('Comment has been posted', 'secondary')
+        return redirect(url_for('post_info', post_id=post.id))
+
+    return render_template('post.html', post=post, form=form)
 
 @app.route('/post/<int:post_id>/edit_post', methods=['GET', 'POST'])
 @login_required
