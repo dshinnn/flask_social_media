@@ -58,8 +58,7 @@ class Post(db.Model):
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    comment_section = db.Column(db.String(256))
+    comment_section = db.Column(db.String(256), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
@@ -69,7 +68,7 @@ class Comment(db.Model):
         db.session.commit()
 
     def __repr__(self):
-        return f"<Comment|{self.title}>"
+        return f"<Comment|{self.comment_section}>"
 
     def save_comment(self):
         db.session.commit()
@@ -77,3 +76,5 @@ class Comment(db.Model):
     def delete_comment(self):
         db.session.delete(self)
         db.session.commit()
+Comment.parent_id = db.relationship(Comment, backref='replies', remote_side=Comment.id)
+Comment.children = db.Column(db.Integer, db.ForeignKey(Comment.id))

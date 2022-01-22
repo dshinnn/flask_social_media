@@ -2,7 +2,7 @@ from app import app
 from flask import render_template, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from app.models import User, Post, Comment
-from app.forms import RegisterForm, LoginForm
+from app.forms import RegisterForm, LoginForm, PostForm
 
 @app.route('/')
 def index():
@@ -57,3 +57,27 @@ def logout():
     logout_user()
     flash('You have succcessfully logged out', 'success')
     return redirect(url_for('index'))
+
+@app.route('/create_post', methods=['GET', 'POST'])
+@login_required
+def create_post():
+    form = PostForm()
+
+    if form.validate_on_submit():
+        title = form.title.data
+        post_section = form.post_section.data
+        user_id = current_user.id
+
+        Post(title=title, post_section=post_section, user_id=user_id)
+        flash('Your post has been created', 'success')
+        return redirect(url_for('index', form=form))
+    
+    return render_template('create_post.html', form=form)
+
+
+# @app.route('/user=<int:user_id>')
+# @login_required
+# def user_info(user_id):
+#     user = User.query.get_or_404(user_id)
+#     return render_template('index.html', user=user)
+

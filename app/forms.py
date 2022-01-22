@@ -18,4 +18,4 @@ class LoginForm(FlaskForm):
 class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     post_section = StringField('Text')
-    submit = SubmitField('Post Comment')
+    submit = SubmitField('Post')
