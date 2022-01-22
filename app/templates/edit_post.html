@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class='text-center'>Create New Post</h1>
+    <form method="POST">
+        {{ form.csrf_token }}
+        <div class="form-group">
+            <fieldset>
+                {{ form.title.label }}
+                {{ form.title(class='form-control', value=post.title) }}
+            </fieldset>
+            <fieldset>
+                {{ form.post_section.label }}
+                {{ form.post_section(class='form-control', value=post.post_section) }}
+            </fieldset>
+            {{ form.submit(value='Save') }}
+        </div>
+    </form>
+{% endblock %}

@@ -82,3 +82,33 @@ def post_info(post_id):
     post = Post.query.get_or_404(post_id)
     return render_template('post.html', post=post)
 
+@app.route('/post/<int:post_id>/edit_post', methods=['GET', 'POST'])
+@login_required
+def edit_post(post_id):
+    post = Post.query.get_or_404(post_id)
+
+    if current_user.id != post.id:
+        flash("Error: Cannot edit someone else's post", "danger")
+        return redirect(url_for('post_info', post_id=post.id))
+    
+    form = PostForm()
+
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.post_section = form.post_section.data
+
+        post.save_post()
+        flash('Post has been updated', 'primary')
+        return redirect(url_for('post_info', post_id=post.id))
+    return render_template('edit_post.html', post=post, form=form)
+
+@app.route('/post/<int:post_id>/delete_post', methods=['GET', 'POST'])
+@login_required
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    if current_user.id != post.user_id:
+        flash("You cannot delete someone else's post", "danger")
+        return redirect(url_for('post_info'), post_id=post.id)
+    post.delete_post()
+    flash('Post has been deleted', 'success')
+    return redirect(url_for('index'))
