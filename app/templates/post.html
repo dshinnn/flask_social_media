@@ -27,17 +27,23 @@
         {% else %}
             <p class='text-muted text-center'><em>Please login to comment on this post</em></p>
         {% endif %}
-
+        
         <h3>Comments</h3>
-        {% for comment in post.comments %}
-            <div class="card bg-secondary text-light mt-2">
-                <div class="card-body">
-                    <h6>{{ comment.get_user() }}</h6>
-                    <p class="fs-5">{{ comment.comment_section }}</p> 
-                    <p class="mb-0"><a href="#" class="text-light">Reply</a></p>
-                </div>
-            </div>
-        {% endfor %}
+        {% if post.comments %}
+            {% for comment in post.comments %}
+                {% if not comment.parent_id %}
+                    <div class="card bg-secondary text-light mt-2">
+                        <div class="card-body">
+                            <h6>{{ comment.get_user() }}</h6>
+                            <p class="fs-5">{{ comment.comment_section }}</p> 
+                            <p class="mb-0"><a href="{{ url_for('reply', comment_id=comment.id) }}" class="text-dark">Reply</a></p>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p class='text-muted text-center'><em>Nothing here, be the first to comment!</em></p>
+        {% endif %}
     </div>
   </div>
 {% endblock %}

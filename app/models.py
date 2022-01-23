@@ -82,5 +82,5 @@ class Comment(db.Model):
     def delete_comment(self):
         db.session.delete(self)
         db.session.commit()
-Comment.parent_id = db.relationship(Comment, backref='replies', remote_side=Comment.id)
-Comment.children = db.Column(db.Integer, db.ForeignKey(Comment.id))
+Comment.parent_id = db.Column(db.Integer, db.ForeignKey(Comment.id))
+Comment.children = db.relationship(Comment, backref='comment', remote_side=Comment.id)

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Reply{% endblock %}
+
+{% block content %}
+<div class="card bg-dark text-white mt-3" >
+    <div class="card-body">
+        <p class='text-muted'><em>Replying to:</em></p>
+        <h6 class="card-title">{{ parent.get_user() }}</h6>
+        <p class="fs-5">{{ parent.comment_section }}</p> 
+
+        {% if not current_user.is_anonymous %}
+            <form method="POST">
+                {{ form.csrf_token }}
+                <br>
+                <fieldset>
+                    {{ form.comment.label }} as {{ current_user.username }}
+                    <br>
+                    {{ form.comment(class='w-100 min-vh-75 mb-2', max_length=255, placeholder='What are your thoughts?')}}
+                </fieldset>
+                {{ form.submit(class='mb-5', value="Reply") }}
+            </form>
+        {% else %}
+            <p class='text-muted text-center'><em>Please login to reply to this post</em></p>
+        {% endif %}
+
+        <h3>Replies</h3>
+        <p>{{parent}}</p>
+        <p>{{parent.parent_id}}</p>
+        {% if parent.children %}
+            {% for reply in parent.children %}
+                <div class="card bg-secondary text-light mt-2">
+                    <div class="card-body">
+                        <h6>{{ reply.get_user() }}</h6>
+                        <p class="fs-5">{{ reply.comment_section }}</p> 
+                        <p class="mb-0"><a href="{{ url_for('reply', comment_id=post.id) }}" class="text-dark">Reply</a></p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class='text-muted text-center'><em>No replies</em></p>
+        {% endif %}
+    </div>
+</div>
+
+
+{% endblock %}

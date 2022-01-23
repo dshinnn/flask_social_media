@@ -122,3 +122,21 @@ def delete_post(post_id):
     post.delete_post()
     flash('Post has been deleted', 'success')
     return redirect(url_for('index'))
+
+@app.route('/comment/<int:comment_id>/reply', methods=['GET', 'POST'])
+@login_required
+def reply(comment_id):
+    parent = Comment.query.get_or_404(comment_id)
+    form = CommentForm()
+
+    if form.validate_on_submit():
+        comment = form.comment.data
+        post_id = parent.post_id
+        user_id = current_user.id
+        parent_id = parent.id
+
+        print(comment, post_id, user_id, parent_id)
+        Comment(comment_section=comment, post_id=post_id, user_id=user_id, parent_id=parent_id)
+        flash('Reply has been posted!', 'success')
+        return redirect(url_for('post_info', post_id=post_id))
+    return render_template('reply.html', form=form, parent=parent)
