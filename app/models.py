@@ -64,6 +64,8 @@ class Comment(db.Model):
     comment_section = db.Column(db.String(256), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    parent_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
+    children = db.relationship('Comment')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -82,5 +84,3 @@ class Comment(db.Model):
     def delete_comment(self):
         db.session.delete(self)
         db.session.commit()
-Comment.parent_id = db.Column(db.Integer, db.ForeignKey(Comment.id))
-Comment.children = db.relationship(Comment, backref='comment', remote_side=Comment.id)

@@ -18,22 +18,20 @@
                     <br>
                     {{ form.comment(class='w-100 min-vh-75 mb-2', max_length=255, placeholder='What are your thoughts?')}}
                 </fieldset>
-                {{ form.submit(class='mb-5', value="Reply") }}
+                {{ form.submit(class='mb-5', valu e="Reply") }}
             </form>
         {% else %}
             <p class='text-muted text-center'><em>Please login to reply to this post</em></p>
         {% endif %}
 
         <h3>Replies</h3>
-        <p>{{parent}}</p>
-        <p>{{parent.parent_id}}</p>
         {% if parent.children %}
-            {% for reply in parent.children %}
+            {% for comment in parent.children %}
                 <div class="card bg-secondary text-light mt-2">
                     <div class="card-body">
-                        <h6>{{ reply.get_user() }}</h6>
-                        <p class="fs-5">{{ reply.comment_section }}</p> 
-                        <p class="mb-0"><a href="{{ url_for('reply', comment_id=post.id) }}" class="text-dark">Reply</a></p>
+                        <h6>{{ comment.get_user() }}</h6>
+                        <p class="fs-5">{{ comment.comment_section }}</p> 
+                        <p class="mb-0"><a href="{{ url_for('reply', comment_id=comment.id) }}" class="text-dark">Reply</a></p>
                     </div>
                 </div>
             {% endfor %}

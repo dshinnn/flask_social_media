@@ -129,14 +129,27 @@ def reply(comment_id):
     parent = Comment.query.get_or_404(comment_id)
     form = CommentForm()
 
+    print(parent)
     if form.validate_on_submit():
         comment = form.comment.data
         post_id = parent.post_id
         user_id = current_user.id
         parent_id = parent.id
 
-        print(comment, post_id, user_id, parent_id)
         Comment(comment_section=comment, post_id=post_id, user_id=user_id, parent_id=parent_id)
         flash('Reply has been posted!', 'success')
-        return redirect(url_for('post_info', post_id=post_id))
     return render_template('reply.html', form=form, parent=parent)
+
+# @app.route('/post/<int:post_id>/<int:comment_id>/edit_commment', methods=['GET', 'POST'])
+# def edit_comment(comment_id):
+#     comment = Comment.query.get_or_404(comment_id)
+
+#     if current_user.id == comment.user_id:
+#         form = CommentForm()
+
+#         if form.validate_on_submit():
+#             comment.comment_section = form.comment.data
+
+#     else:
+#         flash("Error: Cannot edit another user's comment", 'danger')
+#         # return redirect(url_for())
